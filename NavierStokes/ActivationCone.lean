@@ -868,7 +868,7 @@ theorem natural_initial_activation {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
   have hKJ : Icc (-1 : ℝ) 1 ⊆ ReferencePath.parameterInterval := NaturalAxisCoefficients.original_interval_interior
   have hcoef : ∀ η ∈ ReferencePath.parameterInterval, NaturalAxisData.L h η ≠ 0 := by
     intro η hη
-    exact (NaturalAxisCoefficients.L_pos_on_window hsmall ⟨hη.1.le, hη.2.le⟩).ne'
+    exact (NaturalAxisCoefficients.L_pos_on_window (NaturalAxisRange.ofSmall hsmall) ⟨hη.1.le, hη.2.le⟩).ne'
   obtain ⟨τ, α, M, hτ, hτδ, hα, hM, hb⟩ := natural_reference_bounds hΛ F hδ hδlim
   let T0 := min τ 1
   have hT0 : 0 < T0 := lt_min hτ zero_lt_one
@@ -936,7 +936,7 @@ theorem natural_activation_direction {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
   have hKJ : K ⊆ ReferencePath.parameterInterval := NaturalAxisCoefficients.original_interval_interior
   have hcoef : ∀ η ∈ ReferencePath.parameterInterval, NaturalAxisData.L h η ≠ 0 := by
     intro η hη
-    exact (NaturalAxisCoefficients.L_pos_on_window hsmall ⟨hη.1.le, hη.2.le⟩).ne'
+    exact (NaturalAxisCoefficients.L_pos_on_window (NaturalAxisRange.ofSmall hsmall) ⟨hη.1.le, hη.2.le⟩).ne'
   have hm : ∀ y ∈ Icc (0 : ℝ) δ, ∀ η ∈ K,
       ActivationStocks.logViewOne h N.endpoint (referenceAngular L)
           (logHistory N.endpoint I (referenceAngular L) U) (y, η) = referenceP1 L (y, η) ∧

@@ -1,12 +1,14 @@
 import NavierStokes.R3FiniteEnergyComparison
 import NavierStokes.R3ActualCandidate
+import NavierStokes.R3.Theorem
+import NavierStokes.R3.ComparatorBridge
 
 /-!
-# The constructed compact candidate implies option (C)
+# The full whole-space theorem implies option (C)
 
-Zero initial data and the viscosity-rescaled compact force satisfy the exact
-decay conditions in the comparator. Whole-space finite-energy comparison
-excludes a global solution for every positive viscosity.
+The unconditional whole-space theorem constructs one compactly supported flow
+with a uniform energy bound up to time one for every positive viscosity. Its
+same force and zero initial data satisfy the exact comparator conditions.
 -/
 
 noncomputable section
@@ -38,7 +40,7 @@ theorem navier_stokes_breakdown_R3 (ν : ℝ) (hν : ν > 0) :
       (f : EuclideanSpace ℝ (Fin 3) → ℝ → EuclideanSpace ℝ (Fin 3)),
       Comparator.InitialVelocityConditionDecay u₀ ∧ Comparator.ForceConditionDecay f ∧
       ¬ (∃ v p, Comparator.NavierStokesExistenceAndSmoothnessRn ν u₀ f v p) := by
-  obtain ⟨u, p, f, h⟩ := R3CompactCandidate.selected_compact_candidate
-  exact option_C_of_compact_candidate h ν hν
+  obtain ⟨u, p, f, K, h, hglobal⟩ := NavierStokesR3.theorem_1_1 ν hν
+  exact NavierStokesR3.comparator_of_breakdown h hglobal
 
 end NavierStokes.ComparatorBridge

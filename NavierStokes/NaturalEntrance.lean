@@ -54,26 +54,11 @@ theorem Sq_eq_radial {h j Λ : ℝ} {P0 a₀ : ℝ → ℝ} {f U V Pr : ℝ × �
 
 /-- The strictly positive axis contribution is quantitative on the entire
 original parameter interval. -/
-theorem base_source_lower {h j : ℝ} (hsmall : NaturalAxisData.SmallParameters h j)
+theorem base_source_lower {h j : ℝ} (hsmall : NaturalAxisRange.Parameters h j)
     {η : ℝ} (hη : η ∈ Icc (-1 : ℝ) 1) :
     (29 / 10 : ℝ) < -NaturalAxisData.W h j η -
       h * (1 - 2 * η * NaturalAxisData.U j η) := by
-  have hw := NaturalAxisData.neg_W_lower_bound hsmall hη
-  have he : |η| ≤ 1 := abs_le.mpr ⟨hη.1, hη.2⟩
-  have hu : |NaturalAxisData.U j η| ≤ 4001 / 1000 := by
-    calc
-      _ ≤ |4 * η| + |j| := abs_add_le _ _
-      _ = 4 * |η| + j := by rw [abs_mul, abs_of_pos hsmall.j_pos]; norm_num
-      _ ≤ _ := by linarith [hsmall.j_le]
-  have hprod : |η * NaturalAxisData.U j η| ≤ 4001 / 1000 := by
-    rw [abs_mul]
-    exact (mul_le_mul he hu (abs_nonneg _) (by norm_num)).trans_eq (by ring)
-  have hfactor : 1 - 2 * η * NaturalAxisData.U j η ≤ 4501 / 500 := by
-    have := (abs_le.mp hprod).1
-    linarith
-  have hterm := mul_le_mul_of_nonneg_left hfactor hsmall.h_pos.le
-  have hupper := mul_le_mul_of_nonneg_right hsmall.h_le (by norm_num : (0 : ℝ) ≤ 4501 / 500)
-  linarith
+  exact NaturalAxisRange.base_source_lower hsmall hη
 
 theorem chi_zero_imp_H_zero (h j : ℝ) {σ η : ℝ} (hσ : 0 < σ)
     (hchi : NaturalAxisData.chi h j σ η = 0) : NaturalAxisData.H h j η = 0 := by
@@ -399,7 +384,7 @@ theorem chi_continuous (h j : ℝ) {σ : ℝ} (hσ : 0 < σ) :
   positivity
 
 theorem reference_source_absorption {h j σ : ℝ} {P0 : ℝ → ℝ}
-    (v : CoefficientFamily h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (v : CoefficientFamily h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) :
     ∃ M : ℝ, 0 < M ∧ ∀ Λ : ℝ, M ≤ Λ → ∀ p : entranceSet,
       27 / 10 < Λ * ((1 / 20 : ℝ) * NaturalAxisData.L h p.val.2 *
@@ -411,11 +396,11 @@ theorem reference_source_absorption {h j σ : ℝ} {P0 : ℝ → ℝ}
     (referenceRemainder_continuous v hσ)
   · intro p
     exact mul_nonneg
-      (mul_nonneg (by norm_num) (NaturalAxisData.L_pos hsmall p.property.2).le)
+      (mul_nonneg (by norm_num) (NaturalAxisRange.L_pos hsmall p.property.2).le)
       (NaturalAxisData.chi_bounds h j hσ _).1
   · intro p hp
     have hfac : (1 / 20 : ℝ) * NaturalAxisData.L h p.val.2 ≠ 0 :=
-      mul_ne_zero (by norm_num) (NaturalAxisData.L_pos hsmall p.property.2).ne'
+      mul_ne_zero (by norm_num) (NaturalAxisRange.L_pos hsmall p.property.2).ne'
     have hchi := (mul_eq_zero.mp hp).resolve_left hfac
     rw [referenceRemainder_at_chi_zero v hσ p hchi]
     linarith [base_source_lower hsmall p.property.2]
@@ -475,7 +460,7 @@ theorem sourceRemainder_uniform_limit {h j σ : ℝ} {P0 : ℝ → ℝ}
 /-- The exact coefficient-space approximation gives the desired quantitative
 source bound after one common large-scale choice. -/
 theorem source_uniform_lower {h j σ : ℝ} {P0 : ℝ → ℝ}
-    (v : CoefficientFamily h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (v : CoefficientFamily h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) {K : ℝ} (hK : 0 ≤ K) :
     ∃ M : ℝ, 0 < M ∧ ∀ Λ : ℝ, M ≤ Λ → ∀ x : CoefficientPair v.epsilon,
       ‖x - referencePair v‖ ≤ K / (2 * Λ) → ∀ p : entranceSet,
@@ -724,7 +709,7 @@ theorem coefficient_phi_lower {h j σ Λ K : ℝ} {P0 : ℝ → ℝ}
 coefficient-space profile in the solver's error ball. The scale is chosen
 before the normalization `C`. -/
 theorem actual_source_lower {h j σ : ℝ} {P0 : ℝ → ℝ}
-    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) {K : ℝ} (hK : 0 ≤ K) :
     ∃ M : ℝ, 0 < M ∧ ∀ Λ : ℝ, M ≤ Λ → ∀ C : ℝ, 0 < C →
       ∀ x : CoefficientPair d.coefficients.epsilon,
@@ -784,7 +769,7 @@ theorem ns_error {h j σ Λ K : ℝ} {P0 : ℝ → ℝ}
         mul_le_mul_of_nonneg_left herr (by norm_num)
     _ = AxisEvaluation.jetBound v.epsilon 5 1 0 * K / Λ := by field_simp
 
-theorem L_le_one {h j : ℝ} (hsmall : NaturalAxisData.SmallParameters h j) (η : ℝ) :
+theorem L_le_one {h j : ℝ} (hsmall : NaturalAxisRange.Parameters h j) (η : ℝ) :
     NaturalAxisData.L h η ≤ 1 := by
   unfold NaturalAxisData.L
   nlinarith [mul_nonneg hsmall.h_pos.le (sq_nonneg η)]
@@ -792,7 +777,7 @@ theorem L_le_one {h j : ℝ} (hsmall : NaturalAxisData.SmallParameters h j) (η 
 /-- Where `Z*` is separated from zero, the actual axial shear is separated
 from zero uniformly in the normalization. -/
 theorem ns_separated {h j σ Λ K δ : ℝ} {P0 : ℝ → ℝ}
-    (v : CoefficientFamily h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (v : CoefficientFamily h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hK : 0 ≤ K) (hδ : 0 < δ)
     (hscale : 1 + 2 * AxisEvaluation.jetBound v.epsilon 5 1 0 * K / δ ≤ Λ)
     (x : CoefficientPair v.epsilon) (hx : ‖x - referencePair v‖ ≤ K / (2 * Λ))
@@ -805,7 +790,7 @@ theorem ns_separated {h j σ Λ K δ : ℝ} {P0 : ℝ → ℝ}
     have ht : 0 ≤ 2 * AxisEvaluation.jetBound v.epsilon 5 1 0 * K / δ := by positivity
     linarith
   have hΛ' : 2 * AxisEvaluation.jetBound v.epsilon 5 1 0 * K / δ < Λ := by linarith
-  have hL : 0 < NaturalAxisData.L h p.2 := NaturalAxisData.L_pos hsmall hp.2
+  have hL : 0 < NaturalAxisData.L h p.2 := NaturalAxisRange.L_pos hsmall hp.2
   have he := ns_error v hΛ hK x hx hp hL.ne'
   have he' : |ns (axialField j Λ x) p - NaturalAxisData.Z h j P0 p.2 / NaturalAxisData.L h p.2| <
       δ / 2 := by
@@ -984,7 +969,7 @@ theorem profileErrorConstant_nonneg {h j σ : ℝ} {P0 : ℝ → ℝ}
 /-- The fixed-point theorem constructs the retained witness uniformly
 throughout the full allowed normalization range. -/
 theorem exists_coefficientProfile {h j σ : ℝ} {P0 : ℝ → ℝ}
-    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) (hP0 : ContDiff ℝ ∞ P0) :
     ∃ M : ℝ, 0 < M ∧ ∀ Λ : ℝ, M ≤ Λ → ∀ C : ℝ,
       d.normalizationThreshold Λ ≤ C → Nonempty (CoefficientProfile d Λ C) := by
@@ -1047,7 +1032,7 @@ theorem exists_coefficientProfile {h j σ : ℝ} {P0 : ℝ → ℝ}
 
 theorem CoefficientProfile.p1_pos {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
     {d : AnalyticInputs h j σ P0} (F : CoefficientProfile d Λ C)
-    (hsmall : NaturalAxisData.SmallParameters h j) (hΛ : 0 < Λ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hΛ : 0 < Λ)
     (hsource : ∀ p : ℝ × ℝ, rescalePoint Λ p ∈ entranceSet →
       0 < Sq h F.family.f F.family.U F.family.Ubar p)
     {p : ℝ × ℝ} (hp : rescalePoint Λ p ∈ entranceSet) (hX : 0 < p.1) :
@@ -1055,7 +1040,7 @@ theorem CoefficientProfile.p1_pos {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
   have hsegment (X : ℝ) (hX' : X ∈ Icc (0 : ℝ) p.1) :
       rescalePoint Λ (X, p.2) ∈ entranceSet :=
     ⟨⟨mul_nonneg hΛ.le hX'.1, (mul_le_mul_of_nonneg_left hX'.2 hΛ.le).trans hp.1.2⟩, hp.2⟩
-  apply p1_pos_of_source F.family.natural hΛ hX hp.1.2 hp.2 (NaturalAxisData.L_pos hsmall hp.2)
+  apply p1_pos_of_source F.family.natural hΛ hX hp.1.2 hp.2 (NaturalAxisRange.L_pos hsmall hp.2)
   · intro X hX'
     exact F.family.positive (X, p.2) (entrance_mem_strip (hsegment X hX'))
       (hsegment X hX').1.1 (hsegment X hX').1.2
@@ -1064,7 +1049,7 @@ theorem CoefficientProfile.p1_pos {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
 
 theorem CoefficientProfile.cone_at_four {h j σ Λ C δ : ℝ} {P0 : ℝ → ℝ}
     {d : AnalyticInputs h j σ P0} (F : CoefficientProfile d Λ C)
-    (hsmall : NaturalAxisData.SmallParameters h j) (hδ : 0 < δ) (hΛ : 1 ≤ Λ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hδ : 0 < δ) (hΛ : 1 ≤ Λ)
     (hscale : 1 + 2 * AxisEvaluation.jetBound d.coefficients.epsilon 5 1 0 *
       profileErrorConstant d / δ ≤ Λ)
     (hC : entranceNormalization d Λ δ ≤ C)
@@ -1122,7 +1107,7 @@ structure EntranceProfile {h j σ : ℝ} {P0 : ℝ → ℝ}
 /-- A single large scale works for every subsequent sufficiently large
 normalization. Both choices are made from the constructed analytic inputs. -/
 theorem exists_entranceProfile {h j σ δ : ℝ} {P0 : ℝ → ℝ}
-    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) (hP0 : ContDiff ℝ ∞ P0) (hδ : 0 < δ)
     (hcut : ∀ η ∈ Icc (-1 : ℝ) 1, |NaturalAxisData.Z h j P0 η| ≤ δ →
       99 / 100 < NaturalAxisData.chi h j σ η) :
@@ -1154,7 +1139,7 @@ theorem exists_entranceProfile {h j σ δ : ℝ} {P0 : ℝ → ℝ}
       0 < Sq h F.family.f F.family.U F.family.Ubar p := by
     intro p hp
     have hc : 0 ≤ NaturalAxisData.chi h j σ p.2 := (NaturalAxisData.chi_bounds h j hσ p.2).1
-    have hL : 0 < NaturalAxisData.L h p.2 := NaturalAxisData.L_pos hsmall hp.2
+    have hL : 0 < NaturalAxisData.L h p.2 := NaturalAxisRange.L_pos hsmall hp.2
     have hg : 0 ≤ (19 / 20 : ℝ) * NaturalAxisData.L h p.2 * Λ *
       NaturalAxisData.chi h j σ p.2 := by positivity
     linarith [hs p hp]
@@ -1174,7 +1159,7 @@ theorem exists_entranceProfile {h j σ δ : ℝ} {P0 : ℝ → ℝ}
 cone test in the prescribed order: cutoff, common analytic radius, scale,
 and only then normalization. -/
 theorem ideal_prefix_entranceProfile {h j : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j)
+    (hsmall : NaturalAxisRange.Parameters h j)
     {g a : ℝ → ℝ} {cap B : ℝ}
     (hp : PressureDatum.Admissible g a cap) (hB : 2 ≤ B)
     (hg : ∀ y ≤ 0, g y = B ^ 2 * Real.exp ((1 / 5 : ℝ) * y))
@@ -1354,14 +1339,14 @@ theorem ns_eq_scaled_regularAxialLag {h j Λ : ℝ} {P0 a : ℝ → ℝ}
 of the actual regular angular and axial primitives. -/
 theorem EntranceProfile.regular_lag_coordinates {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
     {d : AnalyticInputs h j σ P0} (F : EntranceProfile d Λ C)
-    (hsmall : NaturalAxisData.SmallParameters h j) (hΛ : 0 < Λ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hΛ : 0 < Λ)
     {p : ℝ × ℝ} (hp : rescalePoint Λ p ∈ entranceSet) (hX : 0 < p.1) :
     p1 F.profile.family.f p = p.1 * regularAngularLag h F.profile.family.f
         F.profile.family.U F.profile.family.Ubar p / NaturalAxisData.L h p.2 ∧
       p2 F.profile.family.f F.profile.family.U p =
         p.1 * regularAxialLag h F.profile.family.U F.profile.family.Ubar F.profile.family.Pi p /
           (NaturalAxisData.L h p.2 * angularVelocity F.profile.family.f p) := by
-  have hL : NaturalAxisData.L h p.2 ≠ 0 := (NaturalAxisData.L_pos hsmall hp.2).ne'
+  have hL : NaturalAxisData.L h p.2 ≠ 0 := (NaturalAxisRange.L_pos hsmall hp.2).ne'
   have hdom : p ∈ domain Λ := entrance_mem_strip hp
   have hf : ∀ x ∈ uIcc (0 : ℝ) p.1, F.profile.family.f (x, p.2) ≠ 0 := by
     intro x hx
@@ -1380,7 +1365,7 @@ theorem EntranceProfile.regular_lag_coordinates {h j σ Λ C : ℝ} {P0 : ℝ �
 terms of the source-integral stocks, with no independent stock hypotheses. -/
 theorem EntranceProfile.regular_cone_at_four {h j σ Λ C : ℝ} {P0 : ℝ → ℝ}
     {d : AnalyticInputs h j σ P0} (F : EntranceProfile d Λ C)
-    (hsmall : NaturalAxisData.SmallParameters h j) (hΛ : 0 < Λ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hΛ : 0 < Λ)
     {η : ℝ} (hη : η ∈ Icc (-1 : ℝ) 1) :
     let p : ℝ × ℝ := (4 / Λ, η)
     let q := p.1 * regularAngularLag h F.profile.family.f F.profile.family.U

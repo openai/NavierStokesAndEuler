@@ -1062,7 +1062,7 @@ theorem exists_natural_activation_factor_aligned {h j σ Λ C : ℝ} {P0 : ℝ �
     NaturalAxisCoefficients.original_interval_interior
   have hcoef : ∀ η ∈ ReferencePath.parameterInterval, NaturalAxisData.L h η ≠ 0 := by
     intro η hη
-    exact (NaturalAxisCoefficients.L_pos_on_window hsmall ⟨hη.1.le,hη.2.le⟩).ne'
+    exact (NaturalAxisCoefficients.L_pos_on_window (NaturalAxisRange.ofSmall hsmall) ⟨hη.1.le,hη.2.le⟩).ne'
   have hm : ∀ y ∈ Icc (0 : ℝ) δ, ∀ η ∈ Icc (-1 : ℝ) 1,
       ActivationStocks.logViewOne h N.endpoint (referenceAngular L)
         (logHistory N.endpoint I (referenceAngular L) U) (y,η) = referenceP1 L (y,η) ∧

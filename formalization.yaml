@@ -16,12 +16,14 @@ project:
 
 sources:
   - title: "Finite time blowup for Navier–Stokes"
+    id: "https://cdn.openai.com/pdf/32d9f210-8b73-45e0-91bc-82a30aef8a9a/navier-stokes.pdf"
     authors:
       - "OpenAI"
     type: "article"
     location: "Main theorem and periodic finite-time blowup corollary"
     relationship: "formalizes"
   - title: "Finite time blowup for the Euler equation"
+    id: "https://cdn.openai.com/pdf/315b36cd-ec98-4023-8342-93345194ece1/euler.pdf"
     authors:
       - "OpenAI"
     type: "article"

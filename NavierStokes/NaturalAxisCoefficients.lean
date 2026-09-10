@@ -1,6 +1,6 @@
 import NavierStokes.AnalyticCoefficientBounds
 import NavierStokes.AnalyticPrimitive
-import NavierStokes.NaturalAxisData
+import NavierStokes.NaturalAxisRange
 import NavierStokes.NaturalAxisBridge
 import Mathlib.Topology.MetricSpace.Thickening
 import Mathlib.Analysis.Normed.Module.Convex
@@ -69,7 +69,7 @@ def realGradient (h j σ x : ℝ) : ℝ :=
     complexGradient h j σ (x : ℂ) = (realGradient h j σ x : ℂ) := by
   simp [complexGradient, realGradient, denominator]
 
-theorem L_pos_on_window {h j : ℝ} (hp : NaturalAxisData.SmallParameters h j)
+theorem L_pos_on_window {h j : ℝ} (hp : NaturalAxisRange.Parameters h j)
     {x : ℝ} (hx : x ∈ window.interval) : 0 < NaturalAxisData.L h x := by
   have hx' : -(11 / 10 : ℝ) ≤ x ∧ x ≤ 11 / 10 := by
     simpa [window, Window.interval, neg_div] using hx
@@ -97,7 +97,7 @@ theorem regularSet_open (h j σ : ℝ) : IsOpen (regularSet h j σ) := by
   exact (PressureDatum.strip_open.inter (isOpen_ne_fun hL continuous_const)).inter
     (isOpen_ne_fun hden continuous_const)
 
-theorem real_mem_regularSet {h j σ : ℝ} (hp : NaturalAxisData.SmallParameters h j)
+theorem real_mem_regularSet {h j σ : ℝ} (hp : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) {x : ℝ} (hx : x ∈ window.interval) :
     (x : ℂ) ∈ regularSet h j σ := by
   refine ⟨⟨PressureDatum.real_mem_strip x, ?_⟩, denominator_ne_zero_on_real h j hσ x⟩
@@ -188,7 +188,7 @@ theorem complexField_analytic {g a : ℝ → ℝ} {cap : ℝ}
 
 /-- One compact complex neighborhood for the whole finite family. -/
 theorem exists_common_neighborhood {h j σ : ℝ}
-    (hp : NaturalAxisData.SmallParameters h j) (hσ : 0 < σ) :
+    (hp : NaturalAxisRange.Parameters h j) (hσ : 0 < σ) :
     ∃ ρ : ℝ, 0 < ρ ∧ ∃ K : Set ℂ, IsCompact K ∧
       (∀ x ∈ window.interval, closedBall (x : ℂ) ρ ⊆ K) ∧ K ⊆ regularSet h j σ := by
   let R : Set ℂ := Complex.ofReal '' window.interval
@@ -204,7 +204,7 @@ theorem exists_common_neighborhood {h j σ : ℝ}
 /-- A convex open outer neighborhood and compact inner neighborhood.
 The inner radius can be used for both the fixed fields and an analytic primitive. -/
 theorem exists_convex_common_neighborhood {h j σ : ℝ}
-    (hp : NaturalAxisData.SmallParameters h j) (hσ : 0 < σ) :
+    (hp : NaturalAxisRange.Parameters h j) (hσ : 0 < σ) :
     ∃ ρ : ℝ, 0 < ρ ∧ ∃ U K : Set ℂ,
       IsOpen U ∧ Convex ℝ U ∧ (0 : ℂ) ∈ U ∧ IsCompact K ∧
       (∀ x ∈ window.interval, closedBall (x : ℂ) ρ ⊆ K) ∧
@@ -342,7 +342,7 @@ theorem exists_coefficientFamily_on_neighborhood {h j σ ρ : ℝ}
   simp only [f, complexField_ofReal hp, Complex.ofReal_re]
 
 theorem exists_coefficientFamily {h j σ : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j) (hσ : 0 < σ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hσ : 0 < σ)
     {g a : ℝ → ℝ} {cap : ℝ} (hp : PressureDatum.Admissible g a cap) :
     Nonempty (CoefficientFamily h j σ (PressureDatum.pressure g a)) := by
   obtain ⟨ρ, hρ, K, hK, hcover, hKU⟩ := exists_common_neighborhood hsmall hσ
@@ -352,7 +352,7 @@ theorem exists_coefficientFamily {h j σ : ℝ}
 /-- The coefficient family and the open convex domain for its primitive
 can be chosen together, with an explicit strict gap between the two radii. -/
 theorem exists_coefficientFamily_with_convex_domain {h j σ : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j) (hσ : 0 < σ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hσ : 0 < σ)
     {g a : ℝ → ℝ} {cap : ℝ} (hp : PressureDatum.Admissible g a cap) :
     ∃ v : CoefficientFamily h j σ (PressureDatum.pressure g a),
       ∃ ρ : ℝ, v.epsilon < ρ ∧ ∃ U K : Set ℂ,
@@ -427,7 +427,7 @@ theorem CoefficientFamily.compatible {h j σ : ℝ} {P : ℝ → ℝ}
   simp
 
 theorem ideal_prefix_fixed_coefficients {h j : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j)
+    (hsmall : NaturalAxisRange.Parameters h j)
     {g a : ℝ → ℝ} {cap B : ℝ}
     (hp : PressureDatum.Admissible g a cap) (hB : 2 ≤ B)
     (hg : ∀ y ≤ 0, g y = B ^ 2 * Real.exp ((1 / 5 : ℝ) * y))
@@ -438,7 +438,7 @@ theorem ideal_prefix_fixed_coefficients {h j : ℝ}
           99 / 100 < NaturalAxisData.chi h j σ x) ∧
       Nonempty (CoefficientFamily h j σ (PressureDatum.pressure g a)) := by
   obtain ⟨δ, σ, hδ, hσ, hcut, _⟩ :=
-    NaturalAxisData.ideal_prefix_cutoff_parameters hsmall hp hB hg ha
+    NaturalAxisRange.ideal_prefix_cutoff_parameters hsmall hp hB hg ha
   exact ⟨δ, σ, hδ, hσ, hcut, exists_coefficientFamily hsmall hσ hp⟩
 
 /-- The actual normalized logarithmic phase, as a complex segment integral. -/
@@ -471,7 +471,7 @@ structure AnalyticInputs (h j σ : ℝ) (P : ℝ → ℝ) where
     HasDerivAt (axisPhase h j σ) (complexGradient h j σ z) z
 
 theorem exists_analyticInputs {h j σ : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j) (hσ : 0 < σ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hσ : 0 < σ)
     {g a : ℝ → ℝ} {cap : ℝ} (hp : PressureDatum.Admissible g a cap) :
     Nonempty (AnalyticInputs h j σ (PressureDatum.pressure g a)) := by
   obtain ⟨v, ρ, hgap, U, K, hUopen, hUconv, hUzero, hK, hcover, hKU, hUreg⟩ :=
@@ -565,7 +565,7 @@ theorem AnalyticInputs.uniformAmplitude {h j σ : ℝ} {P : ℝ → ℝ}
 /-- End-to-end fixed analytic input construction from the actual pressure
 integral and ideal prefix, including the normalized amplitude source. -/
 theorem ideal_prefix_analytic_inputs {h j : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j)
+    (hsmall : NaturalAxisRange.Parameters h j)
     {g a : ℝ → ℝ} {cap B : ℝ}
     (hp : PressureDatum.Admissible g a cap) (hB : 2 ≤ B)
     (hg : ∀ y ≤ 0, g y = B ^ 2 * Real.exp ((1 / 5 : ℝ) * y))
@@ -576,7 +576,7 @@ theorem ideal_prefix_analytic_inputs {h j : ℝ}
           99 / 100 < NaturalAxisData.chi h j σ x) ∧
       Nonempty (AnalyticInputs h j σ (PressureDatum.pressure g a)) := by
   obtain ⟨δ, σ, hδ, hσ, hcut, _⟩ :=
-    NaturalAxisData.ideal_prefix_cutoff_parameters hsmall hp hB hg ha
+    NaturalAxisRange.ideal_prefix_cutoff_parameters hsmall hp hB hg ha
   exact ⟨δ, σ, hδ, hσ, hcut, exists_analyticInputs hsmall hσ hp⟩
 
 end NavierStokes.NaturalAxisCoefficients

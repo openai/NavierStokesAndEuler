@@ -1,15 +1,14 @@
 import NavierStokes.ComparatorBridge
 import NavierStokes.ActualCandidateAssembly
 import NavierStokes.CandidateConsequences
+import NavierStokes.PeriodicPaperComparator
 
 /-!
-# The constructed candidate implies option (D)
+# The full periodic corollary implies option (D)
 
-For every positive viscosity `ν`, use zero initial velocity and the forcing
-`fν x t = ν² • f (ν * t, x)` supplied by the viscosity-one candidate. Its
-smoothness, periodicity, and compact future time support give every force-decay
-bound required by the comparator. A hypothetical global solution rescales to a
-global viscosity-one solution, contradicting the existing maximal-lifespan theorem.
+For every positive viscosity, the full periodic corollary supplies a solution
+that blows up exactly at time one. Its same force and zero datum satisfy every
+condition in the comparator, including the force derivative decay bounds.
 
 No result here uses any of the comparator's unproved statements.
 -/
@@ -50,7 +49,7 @@ theorem navier_stokes_breakdown_periodic (ν : ℝ) (hν : ν > 0) :
       (f : EuclideanSpace ℝ (Fin 3) → ℝ → EuclideanSpace ℝ (Fin 3)),
       Comparator.InitialVelocityConditionPeriodic u₀ ∧ Comparator.ForceConditionPeriodic f ∧
       ¬ (∃ v p, Comparator.NavierStokesExistenceAndSmoothnessPeriodic ν u₀ f v p) := by
-  obtain ⟨u, p, f, h⟩ := ActualCandidateAssembly.selected_candidate
-  exact option_D_of_candidate h ν hν
+  obtain ⟨u, p, f, K, h, hglobal⟩ := PeriodicPaper.periodic_corollary ν hν
+  exact option_D_of_paper_candidate h hglobal
 
 end NavierStokes.ComparatorBridge

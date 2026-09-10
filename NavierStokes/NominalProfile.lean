@@ -46,7 +46,7 @@ structure AxisPreparation (F : Profile) (j : ℝ) where
 
 theorem prepare_axis (F : Profile) (hP : 2 ≤ F.data.core.P) {j : ℝ}
     (hj : NaturalAxisData.SmallParameters F.data.h j) : Nonempty (AxisPreparation F j) := by
-  have he := NaturalEntrance.ideal_prefix_entranceProfile hj
+  have he := NaturalEntrance.ideal_prefix_entranceProfile (NaturalAxisRange.ofSmall hj)
     (SchedulePressure.admissible F.data) hP
     (fun y hy => SchedulePressure.clockWeight_ideal F.data hy)
     (fun y hy => SchedulePressure.shapeExponent_ideal F.data hy)
@@ -2663,7 +2663,7 @@ theorem prepare_axis_with_cutoff (F : Profile) (hP : 2 ≤ F.data.core.P) {j : �
     ∃ prep : AxisPreparation F j, ∀ eta ∈ Icc (-1 : ℝ) 1,
       |NaturalAxisData.Z F.data.h j F.axisDatum eta| ≤ prep.delta →
         99 / 100 < NaturalAxisData.chi F.data.h j prep.sigma eta := by
-  have he := NaturalAxisCoefficients.ideal_prefix_analytic_inputs hj
+  have he := NaturalAxisCoefficients.ideal_prefix_analytic_inputs (NaturalAxisRange.ofSmall hj)
     (SchedulePressure.admissible F.data) hP
     (fun y hy => SchedulePressure.clockWeight_ideal F.data hy)
     (fun y hy => SchedulePressure.shapeExponent_ideal F.data hy)

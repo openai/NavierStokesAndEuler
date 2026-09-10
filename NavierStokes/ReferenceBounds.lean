@@ -485,7 +485,7 @@ theorem qModel_uniform_lower {h j σ : ℝ} {P0 : ℝ → ℝ}
           mul_ne_zero (by norm_num) (NaturalAxisData.L_pos hsmall p.1.property.2).ne'
         have hchi := (mul_eq_zero.mp hz).resolve_left hf
         rw [qModel_at_chi_zero v B hσ p hchi]
-        linarith [NaturalEntrance.base_source_lower hsmall p.1.property.2])
+        linarith [NaturalEntrance.base_source_lower (NaturalAxisRange.ofSmall hsmall) p.1.property.2])
   obtain ⟨δ, hδ, hpert⟩ := NaturalEntrance.compact_small_perturbation _
     (qModel_continuous v B hσ) (by norm_num : (0 : ℝ) < 1 / 10)
   let M := max M₀ (1 + (1 + K) / δ)
@@ -1066,7 +1066,7 @@ theorem bounds_from_sources (hsmall : NaturalAxisData.SmallParameters h j) (hσ 
     have hX := ha.trans_le haX
     have hdom := reference_mem E.profile hΛ hp.1.1 hp.2
     have hL := NaturalAxisData.L_pos hsmall hp.2
-    have hL1 := NaturalEntrance.L_le_one hsmall p.2
+    have hL1 := NaturalEntrance.L_le_one (NaturalAxisRange.ofSmall hsmall) p.2
     apply cone_margin_of_dichotomy (hpos p hp hX)
     by_cases hchi : 99 / 100 ≤ NaturalAxisData.chi h j σ p.2
     · left
@@ -1116,7 +1116,7 @@ theorem bounds_from_sources (hsmall : NaturalAxisData.SmallParameters h j) (hσ 
         (N.refF_pos δ hdom hp.1.1) ((le_abs_self (P.f p)).trans (hfbound p hp)) hns hCbig
   · intro η hη
     apply p1_at_hundred_gt_three P (reference_mem E.profile hΛ (p := (100, η)) (by norm_num) hη)
-      (NaturalAxisData.L_pos hsmall hη) (NaturalEntrance.L_le_one hsmall η)
+      (NaturalAxisData.L_pos hsmall hη) (NaturalEntrance.L_le_one (NaturalAxisRange.ofSmall hsmall) η)
       (fun s hs => N.refF_pos δ (reference_mem E.profile hΛ (p := (s, η)) hs.1 hη) hs.1)
       (reference_antitone E hΛ hδ hδT hP0 (by norm_num : (0 : ℝ) ≤ 100) hη)
     intro s hs

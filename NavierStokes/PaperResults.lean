@@ -1,0 +1,4 @@
+import NavierStokes.PeriodicPaperTheorem
+import NavierStokes.LocalAngularGrowth
+import NavierStokes.LocalPaperHeat
+import NavierStokes.PaperAdditionalResults

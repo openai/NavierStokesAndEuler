@@ -786,7 +786,7 @@ theorem reference_first_lower {h j σ Λ C δ : ℝ} {P0 : ℝ → ℝ}
   let P := ReferenceBounds.referenceProfiles E.profile hΛ hδ hδT hP0
   let N := ReferencePath.Input.ofNatural hΛ E.profile.family
   have hL := NaturalAxisData.L_pos hsmall hp.2
-  have hL1 := NaturalEntrance.L_le_one hsmall p.2
+  have hL1 := NaturalEntrance.L_le_one (NaturalAxisRange.ofSmall hsmall) p.2
   have hsource (t : ℝ) (ht : t ∈ Icc (0 : ℝ) p.1) :
       (12 / 5 : ℝ) ≤ ReferenceBounds.sourceQ P h (t, p.2) := by
     have hm := hb.source_lower (t, p.2) ⟨⟨ht.1, ht.2.trans hp.1.2⟩, hp.2⟩
@@ -1888,7 +1888,7 @@ theorem comparable_final_first {h j σ Λ C B K X η : ℝ} {P0 : ℝ → ℝ}
     rw [(r.final_shears hη (le_rfl : r.holdRadius ≤ r.holdRadius)).2] at hp
     simpa only [projection, zero_div, mul_zero, add_zero] using hp
   apply actual_hold_barrier r.profiles (by linarith [r.hundred_lt_hold]) hX.1
-    (NaturalAxisData.L_pos hsmall hη) (NaturalEntrance.L_le_one hsmall η)
+    (NaturalAxisData.L_pos hsmall hη) (NaturalEntrance.L_le_one (NaturalAxisRange.ofSmall hsmall) η)
     (fun t ht => r.profiles_mem hη (r.holdRadius_pos.le.trans ht.1))
     (fun t ht => r.profiles_positive (original_interval_interior hη) (r.holdRadius_pos.le.trans ht.1))
     (fun t ht => r.final_logSlope hη ht.1) ?_ hinit

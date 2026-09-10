@@ -1007,7 +1007,7 @@ theorem activationStress_zero_of_nonpos {x eta : ℝ} (hx : x ≤ 0)
     W.controls.referenceWidth_small F.axisDatum F.axisDatum_contDiff
   have hcoef : ∀ eta ∈ ReferencePath.parameterInterval, NaturalAxisData.L F.data.h eta ≠ 0 := by
     intro eta heta
-    exact (NaturalAxisCoefficients.L_pos_on_window W.axis.small ⟨heta.1.le, heta.2.le⟩).ne'
+    exact (NaturalAxisCoefficients.L_pos_on_window (NaturalAxisRange.ofSmall W.axis.small) ⟨heta.1.le, heta.2.le⟩).ne'
   obtain ⟨P, Q, _, _, hfactor⟩ := ActivationStocks.exists_log_stock_factors F.data.h
     N.endpoint_pos I ReferencePath.parameterInterval_open hL hU hi hcoef
   have hηJ := NaturalAxisCoefficients.original_interval_interior hη

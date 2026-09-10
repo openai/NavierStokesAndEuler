@@ -498,7 +498,7 @@ theorem exists_natural_core {h j : ℝ} (hsmall : NaturalAxisData.SmallParameter
         ((1 - t) ^ (-NaturalAxisData.A h) * j) • coordinateVector 2) ∧
       SpeedUnboundedAtOne (coreVelocity h f V) := by
   obtain ⟨_, _, Λ, _, _, _, hΛ, _, f, U, V, Pr, hs, _, _⟩ :=
-    NaturalProfile.exists_natural_profiles hsmall hp hB hg ha
+    NaturalProfile.exists_natural_profiles (NaturalAxisRange.ofSmall hsmall) hp hB hg ha
   have hh1 : h < 1 / 2 := by linarith [hsmall.h_le]
   refine ⟨Λ, hΛ, f, V, coreDomain_isOpen hsmall.h_pos hh1 Λ,
     (fun t ht => core_axis_mem h Λ ht),

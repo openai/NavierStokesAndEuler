@@ -365,7 +365,7 @@ private theorem axial_rescale_identity
       field_simp ; ring
 
 theorem angular_equation_reconstruct {h j σ Λ : ℝ} {P0 a₀ : ℝ → ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j) (hΛ : Λ ≠ 0)
+    (hsmall : NaturalAxisRange.Parameters h j) (hΛ : Λ ≠ 0)
     {Φ u B P : ℝ × ℝ → ℝ}
     (hs : IsScaledSolution window (actualData h j σ P0) (1 / Λ) a₀ Φ u B P)
     {p : ℝ × ℝ} (hp : p ∈ domain Λ)
@@ -392,7 +392,7 @@ theorem angular_equation_reconstruct {h j σ Λ : ℝ} {P0 a₀ : ℝ → ℝ}
       affineProfile, pullback, mul_assoc] using hs.angular_equation (rescalePoint Λ p) hp
 
 theorem axial_equation_reconstruct {h j σ Λ : ℝ} {P0 a₀ : ℝ → ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j) (hΛ : Λ ≠ 0)
+    (hsmall : NaturalAxisRange.Parameters h j) (hΛ : Λ ≠ 0)
     (hP0 : ContDiff ℝ ∞ P0) {Φ u B P : ℝ × ℝ → ℝ}
     (hs : IsScaledSolution window (actualData h j σ P0) (1 / Λ) a₀ Φ u B P)
     {p : ℝ × ℝ} (hp : p ∈ domain Λ) :
@@ -472,7 +472,7 @@ theorem average_integral_reconstruct {Λ : ℝ} (hΛ : 0 < Λ)
 
 /-- Reconstruction preserves the full differential and integral system. -/
 theorem reconstruct_solution {h j σ Λ : ℝ} {P0 a₀ : ℝ → ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j) (hΛ : 0 < Λ)
+    (hsmall : NaturalAxisRange.Parameters h j) (hΛ : 0 < Λ)
     (hP0 : ContDiff ℝ ∞ P0)
     (haSmooth : ContDiffOn ℝ ∞ a₀ (Ioo window.left window.right))
     (ha : ∀ η ∈ Ioo window.left window.right,
@@ -601,7 +601,7 @@ def ProfileFamily.Pi {h j σ Λ C : ℝ} {P0 : ℝ → ℝ} {d : AnalyticInputs 
 /-- The scale threshold is uniform over every normalization above the actual
 compact-domain exponential threshold. -/
 theorem exists_profileFamily {h j σ : ℝ} {P0 : ℝ → ℝ}
-    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisData.SmallParameters h j)
+    (d : AnalyticInputs h j σ P0) (hsmall : NaturalAxisRange.Parameters h j)
     (hσ : 0 < σ) (hP0 : ContDiff ℝ ∞ P0) :
     ∃ Λ₀ : ℝ, 0 < Λ₀ ∧ ∀ Λ : ℝ, Λ₀ ≤ Λ →
       ∀ C : ℝ, d.normalizationThreshold Λ ≤ C → Nonempty (ProfileFamily d Λ C) := by
@@ -646,7 +646,7 @@ theorem exists_profileFamily {h j σ : ℝ} {P0 : ℝ → ℝ}
 /-- The pressure integral and ideal prefix yield actual unscaled natural
 profiles after selecting the cutoff and common analytic coefficient radius. -/
 theorem ideal_prefix_profileFamily {h j : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j)
+    (hsmall : NaturalAxisRange.Parameters h j)
     {g a : ℝ → ℝ} {cap B : ℝ}
     (hp : PressureDatum.Admissible g a cap) (hB : 2 ≤ B)
     (hg : ∀ y ≤ 0, g y = B ^ 2 * Real.exp ((1 / 5 : ℝ) * y))
@@ -667,7 +667,7 @@ theorem ideal_prefix_profileFamily {h j : ℝ}
 analytic input family, large scale, and normalization are all constructed
 from the stated pressure assumptions. -/
 theorem exists_natural_profiles {h j : ℝ}
-    (hsmall : NaturalAxisData.SmallParameters h j)
+    (hsmall : NaturalAxisRange.Parameters h j)
     {g a : ℝ → ℝ} {cap B : ℝ}
     (hp : PressureDatum.Admissible g a cap) (hB : 2 ≤ B)
     (hg : ∀ y ≤ 0, g y = B ^ 2 * Real.exp ((1 / 5 : ℝ) * y))

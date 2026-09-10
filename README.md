@@ -1,8 +1,12 @@
 # Finite time blowup for Navier–Stokes and Euler equations
 
 This repository contains Lean 4 formalizations of the results presented in
-“Finite time blowup for Navier–Stokes” and
-“Finite time blowup for the Euler equation” by OpenAI.
+“[Finite time blowup for Navier–Stokes](https://cdn.openai.com/pdf/32d9f210-8b73-45e0-91bc-82a30aef8a9a/navier-stokes.pdf)” and
+“[Finite time blowup for the Euler equation](https://cdn.openai.com/pdf/315b36cd-ec98-4023-8342-93345194ece1/euler.pdf)” by OpenAI.
+
+- [Read the blog post](https://openai.com/index/navier-stokes-solution/)
+- [Read the Navier-Stokes paper](https://cdn.openai.com/pdf/32d9f210-8b73-45e0-91bc-82a30aef8a9a/navier-stokes.pdf)
+- [Read the Euler paper](https://cdn.openai.com/pdf/315b36cd-ec98-4023-8342-93345194ece1/euler.pdf)
 
 ## Navier Stokes
 
